@@ -1,0 +1,88 @@
+{% extends "digitizer/base.html" %}
+{% load static %}
+
+{% block title %}Analyze Bar Chart{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+        <h2 class="mb-0">Digitize Bar Chart</h2>
+    </div>
+    <div class="card-body">
+         {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> Please fix the following issues:
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" id="digitizer-form">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="form-label h5">1. Upload Bar Chart Image</label>
+                {{ form.original_image }}
+                <div class="form-text">Supported formats: JPG, PNG, BMP</div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label h5">2. Calibrate Vertical Baseline</label>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Click on two points that form the vertical baseline (y-axis). 
+                    Both points should be on the same vertical line.
+                </div>
+                <div class="border rounded p-2 bg-light position-relative">
+                    <canvas id="calibration-canvas" class="img-fluid"></canvas>
+                    <div id="canvas-help" class="position-absolute top-50 start-50 translate-middle text-center text-muted">
+                        <i class="bi bi-image display-4"></i>
+                        <p class="mt-2">Upload an image to begin</p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <button type="button" id="reset-points" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-repeat"></i> Reset Points
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label h5">3. Baseline Value (P1)</label>
+                    {{ form.p1_value }}
+                    <div class="form-text">Value at the bottom point (P2)</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label h5">4. Top Value (P2)</label>
+                    {{ form.p2_value }}
+                    <div class="form-text">Value at the top point (P2)</div>
+                </div>
+            </div>
+            
+            <!-- Hidden fields for calibration points -->
+            {{ form.x1 }}
+            {{ form.y1 }}
+            {{ form.x2 }}
+            {{ form.y2 }}
+            
+            <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                <i class="bi bi-graph-up"></i> Analyze Chart
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'digitizer/js/calibration.js' %}"></script>
+{% endblock %}
