@@ -5,6 +5,8 @@ from .utils import digitize_barchart
 import os
 import uuid
 from django.core.files.storage import default_storage
+import cv2
+import base64
 
 def index(request):
     if request.method == 'POST':
@@ -35,15 +37,20 @@ def index(request):
             value_diff = p2_value - p1_value 
             
             try:
-                bars,total1,total2, analyzed_path = digitize_barchart(
+                bars,total1,total2, output_img = digitize_barchart(
                     orig_path,
                     x1, y1, x2, y2,
                     p1_value,
                     p2_value
                 )
                 
-                # Get URL for analyzed image
-                analyzed_url = f"/media/analyzed/{os.path.basename(analyzed_path)}"
+                # Convert to JPEG bytes in memory
+                _, buffer = cv2.imencode('.jpg', output_img)
+                
+                # Convert to base64 string
+                img_str = base64.b64encode(buffer).decode('utf-8')
+                # # Get URL for analyzed image
+                # analyzed_url = f"/media/analyzed/{os.path.basename(analyzed_path)}"
                 
                 # Clean up original image after processing
                 os.remove(orig_path)
@@ -52,7 +59,7 @@ def index(request):
                     'bars': bars,
                     'total1': total1,
                     'total2':total2,
-                    'analyzed_image_url': analyzed_url
+                    'image_data': img_str
                 })
                 
             except Exception as e:

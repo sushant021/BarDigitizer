@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 from django.conf import settings
+import math
 
 def calculate_heights(cnt):
     """Calculate bar heights from contour points with robust error handling"""
@@ -164,9 +165,9 @@ def digitize_barchart(image_path, x1, y1, x2, y2, p1_value, p2_value):
         total2 = 0
         for i, bar in enumerate(bars):
             # Calculate actual values using the scale factor
-            actual_value1 = p1_value + (bar['h1'] * scale)
-            actual_value2 = p1_value + (bar['h2'] * scale)
-            if actual_value1 == actual_value2:
+            actual_value1 = math.ceil(p1_value + (bar['h1'] * scale))
+            actual_value2 = math.ceil(p1_value + (bar['h2'] * scale))
+            if  abs(actual_value1 - actual_value2) <= 5:
                 actual_value2 = 0
             
             total1 = total1+actual_value1
@@ -194,12 +195,12 @@ def digitize_barchart(image_path, x1, y1, x2, y2, p1_value, p2_value):
         cv2.circle(output_img, (x2, y2), 8, (0, 255, 255), -1)  # p2
 
         # Save output
-        output_filename = f"analyzed_{os.path.basename(image_path)}"
-        output_path = os.path.join(settings.MEDIA_ROOT, 'analyzed', output_filename)
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        cv2.imwrite(output_path, output_img)
+        # output_filename = f"analyzed_{os.path.basename(image_path)}"
+        # output_path = os.path.join(settings.MEDIA_ROOT, 'analyzed', output_filename)
+        # os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        # cv2.imwrite(output_path, output_img)
         
-        return results,total1,total2, output_path
+        return results,total1,total2, output_img
         
     except Exception as e:
         # Handle any exceptions and provide meaningful error

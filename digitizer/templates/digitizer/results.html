@@ -10,7 +10,8 @@
     </div>
     <div class="card-body">
         <div class="text-center mb-4">
-            <img src="{{ analyzed_image_url }}" alt="Analyzed Chart" class="img-fluid rounded border shadow-sm">
+            <!-- <img src="{{ analyzed_image_url }}" alt="Analyzed Chart" class="img-fluid rounded border shadow-sm"> -->
+             <img src="data:image/jpeg;base64,{{ image_data }}" alt="Processed Image" class="img-fluid rounded border shadow-sm">
         </div>
         
         <h3 class="mb-3">Measurements</h3>
@@ -20,9 +21,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Bar #</th>
-                        <th>X Point</th>
-                        <th>Pixel height 1 </th>
-                        <th>Pixel height 2</th>
+                        
                         <th>Calculated Values</th>
                     </tr>
                 </thead>
@@ -30,21 +29,16 @@
                     {% for bar in bars %}
                     <tr>
                         <td>{{ bar.index }}</td>
-                        <td>{{ bar.x }}</td>
-                        <td>{{ bar.height_pixels1 }}</td>
-                        <td>{{ bar.height_pixels2 }}</td>
-                        
-                        <td><strong>[{{ bar.actual_value1|floatformat:2}}],</span></strong> <strong> [{{bar.actual_value2|floatformat:2}}]</strong></td>
+                                         
+                        <td>{{ bar.actual_value1}},</span> {{bar.actual_value2}}</td>
                     </tr>
                    
                     {% endfor %}
 
                     <tr>
-                        <td><strong>Total </strong> </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><strong>[{{total1|floatformat:2}}]</strong><strong>[{{total2|floatformat:2}}]</strong></td>
+                        <td>Total  </td>
+                       
+                        <td><strong> {{total1}}, {{total2}} </strong></td>
                     </tr>
                 </tbody>
             </table>

@@ -14,8 +14,11 @@ class BarChartForm(forms.Form):
             'class': 'form-control',
             'step': '1',
             'min': '0',
+            'placeholder':'0'
         }),
-        help_text="Baseline"
+        help_text="Baseline",
+        required=False,
+        initial=0
     )
     p2_value = forms.IntegerField(
         label="Second point in y axis",
