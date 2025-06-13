@@ -36,7 +36,6 @@ ALLOWED_HOSTS = [
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,9 +46,12 @@ INSTALLED_APPS = [
     'digitizer',
     'api',
     'rest_framework',
+    'corsheaders',
+    
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,6 +61,44 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Your local development server
+    "http://127.0.0.1:8000",
+    "https://your-production-domain.com",  # Add production domains
+]
+
+# Optional configurations
+CORS_ALLOW_CREDENTIALS = True  # If using cookies/authentication
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_EXPOSE_HEADERS = []  # Headers to expose to frontend
+CORS_PREFLIGHT_MAX_AGE = 86400  # Cache preflight requests for 24 hours
+
+# For CSRF protection
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "https://mysite-mfnp.onrender.com",
+]
+
 
 ROOT_URLCONF = 'bar_chart_digitizer.urls'
 
