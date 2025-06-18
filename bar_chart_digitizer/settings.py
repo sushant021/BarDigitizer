@@ -64,7 +64,7 @@ MIDDLEWARE = [
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    "null"
+    "null",
     "http://localhost:8000",  # Your local development server
     "http://127.0.0.1:8000",
     "https://your-production-domain.com",  # Add production domains
