@@ -123,7 +123,7 @@ def digitize_barchart(image_path, x1, y1, x2, y2, p1_value, p2_value):
         # filter contours for width greater than 10
         contours = [
             cnt for cnt in contours 
-            if cv2.boundingRect(cnt)[2] > 10
+            if cv2.boundingRect(cnt)[2] > 10 and cv2.boundingRect(cnt)[3] > 5
         ]
         
 
